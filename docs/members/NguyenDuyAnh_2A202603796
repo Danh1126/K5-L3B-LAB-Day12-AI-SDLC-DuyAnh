@@ -1,0 +1,7 @@
+# Phản tư cá nhân
+
+## Phase 1
+- **Phần việc đã thực hiện:**
+  - Thiết lập repository, chỉnh sửa `TEAM.md`, `game.contract.json` và `tools/check_team.py` phù hợp với mô hình làm việc cá nhân.
+  - Cài đặt đầy đủ luật chơi cho buổi sáng (`chonoi/sim/gather.py`: oxy, ngạt, hái rau, bắt cá, giỏ LIFO) và buổi tối (`chonoi/sim/quan.py`: đặt món, giữ chỗ nguyên liệu, nấu, phục vụ, tính tiền/boa/uy tín).
+  - Chạy kiểm thử đơn vị, smoke test hai tiến trình và hoàn thiện tài liệu kiểm chứng (`docs/verification/phase-1.md`, `docs/proof/phase-1/`).

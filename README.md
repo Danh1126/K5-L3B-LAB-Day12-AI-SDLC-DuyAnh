@@ -54,3 +54,32 @@ Hết giờ mỗi phase thì gắn tag rồi đi tiếp; chỗ chưa xong ghi tr
 
 - Dùng AI thoải mái; **không sao chép repo của nhóm khác**; bằng chứng phải thật.
 - Nhân vật, bối cảnh là bản gốc của lab; asset ngoài chỉ dùng CC0/CC-BY/MIT hoặc tự tạo, ghi nguồn trong `CREDITS.md`. Không commit API key, token, `.env`.
+
+## Cách chạy & Kiểm thử
+
+### 1. Chạy kiểm thử đơn vị (1 lệnh)
+- **Linux / macOS:** `PYTHONPATH=tests:. python3 -m unittest discover -s tests -v`
+- **Windows PowerShell:** `$env:PYTHONPATH="tests;."; python -m unittest discover -s tests -v`
+
+### 2. Chạy Smoke test 2 tiến trình (Sáng -> Kho -> Tối)
+```bash
+python3 -m chonoi.headless --mode gather --seed 42 --scenario docs/proof/phase-1/dock.json --inputs docs/proof/phase-1/dock-inputs.json --ticks 1 --out docs/proof/phase-1/gather.jsonl --inventory-out docs/proof/phase-1/catch.json
+python3 -m chonoi.headless --mode quan --seed 42 --inventory docs/proof/phase-1/catch.json --ticks 0 --out docs/proof/phase-1/quan.jsonl
+
+## Hợp đồng file kho (`inventory`)
+File JSON truyền dữ liệu nguyên liệu từ ca sáng (`gather`) sang ca tối (`quan`):
+- **Cấu trúc bắt buộc:** Chỉ chứa duy nhất khóa `"items"` ánh xạ `kind` (chuỗi) sang số lượng (số nguyên không âm). Các loại nguyên liệu có số lượng bằng 0 không xuất hiện trong object. Kho rỗng có dạng `{"items":{}}`
+- **Quy tắc ghi/đọc:** Tiến trình `gather` chỉ xuất file đúng một lần khi có sự kiện `gather_end` (ngất sẽ xuất kho rỗng). Tiến trình `quan` từ chối với mã thoát `2` nếu sai schema, lạ tên nguyên liệu hoặc giá trị âm
+
+### Ví dụ hợp lệ
+```json
+{
+  "items": {
+    "bong_sung": 2,
+    "ca_loc": 1
+  }
+}
+
+## Cách tính điểm & Điều khiển
+- **Điều khiển:** `WASD` hoặc phím mũi tên (di chuyển/bơi), `E` (tương tác: cập bến, hái rau, nấu, lấy món, phục vụ), `Space` (bắt cá khi lặn), `R` (chơi lại)
+- **Công thức tính điểm:** `score = earned + 100 * floor(reputation)` (trong đó `earned` là tổng doanh thu tính theo nghìn đồng
